@@ -2,17 +2,30 @@
 > Python wrapper around the docker container of [rock-core/tools-pocolog2msgpack](https://github.com/rock-core/tools-pocolog2msgpack)
 
 **Table of content**
+- [dependencies](#dependencies)
 - [getting started](#getting-started)
 
-## getting started
-**comming soon :)**
+## dependencies
+| dependencie | version      |
+| :---------- | :----------- |
+| python      | >=3.7        |
+| pipenv      | >=2018.11.28 |
+| docker      | >=19.03      |
 
-<!-- 1. install dependencies
+## getting started
+
+1. install dependencies
    ```shell
    $ make dep
    ```
-1. convert all files in `data/log/`
-   ```shell
+1. convert log-files
+   ```python
+   # convert files in data/log/
    $ make run
    ```
-1. df -->
+   **OR**
+   ```python
+   # convert files in <parent_dir_of_log-dir>/log/
+   $ pipenv run python convert_log_files.py --path <parent_dir_of_log-dir>
+   ```
+
