@@ -3,7 +3,8 @@ import os
 
 import docker
 
-from converter.utilities import get_files, process_file
+from .utilities import get_files
+from .x_2_y_file import X2YFile
 
 logging.basicConfig(level=logging.INFO)
 
@@ -14,10 +15,10 @@ class Converter():
     client: docker.DockerClient = docker.from_env()
     image_name: str = "af01/pocolog2msgpack"
 
-    def __init__(self, vol_name: str = "data/") -> None:
+    def __init__(self, base_path: str) -> None:
         logging.info("Init Converter")
 
-        vol_dir = os.path.abspath(vol_name)
+        vol_dir = os.path.abspath(base_path)
 
         self.container = cont = self.client.containers.run(
             image=self.image_name,
@@ -42,29 +43,25 @@ class Converter():
         self.container.stop(timeout=10)
         logging.info("... done.")
 
-    def convert(self, file_name: str) -> None:
-        logging.info(f"Start converting {file_name}")
+    def convert(self, log_2_msg_file: X2YFile) -> None:
+        logging.info(f"... Convert {log_2_msg_file}")
 
-        # TODO: think about solution to use e.g. base_path instead of hard-coded path-fragments
+        os.makedirs(
+            log_2_msg_file.get_dir_path(file_type="msg", full=True),
+            exist_ok=True
+        )
 
-        p_file = process_file(file_name, new_extension="msg")
-
-        log_file_path = f"./log/{p_file.full}"
-        msg_file_path = f"./msg/{processed_file.get('')}"
-
-        msg_file_name = extract_file_name(msg_file_path)
-        msg_file_path = f"./test/{msg_file_name}"
-
-        os.makedirs(f"./data/msg/{msg_file_path}", exist_ok=True)
+        log_file_path = log_2_msg_file.get_file_path(file_type="log")
+        msg_file_path = log_2_msg_file.get_file_path(file_type="msg")
 
         command = f"bash /opt/rock/run.sh -l {log_file_path} -o {msg_file_path}"
-        logging.info(f"... CMD: {command}")
+        logging.debug(f"... ... CMD: {command}")
 
         ret = self.container.exec_run(
             cmd=command,
         )
-        logging.info(f"... done (return code: {ret.exit_code})")
-        logging.info(f"... output:\n{ret.output.decode('utf-8')}")
+        logging.info(f"... ... done (return code: {ret.exit_code})")
+        logging.debug(f"... ... output:\n{ret.output.decode('utf-8')}")
 
         return None
 
@@ -75,31 +72,34 @@ class Converter():
             file_type=file_type,
             log=True,
         )
+        logging.debug(f"... files: {log_files}")
 
         for file_name in log_files:
-            if cache is True and self._msg_exists(file_name) is True:
-                logging.info(f"... msg-file for {file_name} already exists")
-                continue
-            else:
-                self.convert(file_name=file_name)
+            log_2_msg_file = X2YFile(file_name=file_name, file_type=file_type)
 
-    def _msg_exists(self, file_name: str) -> bool:
-        msg_files = get_files("data/msg/", file_type="msg")
-        msg_file_path = get_new_extension(file_name, new_type="msg")
+            if cache is True:
 
-        if msg_file_path in msg_files:
-            return True
-        else:
-            return False
+                file_exists = log_2_msg_file.file_exists(file_type="msg")
+                if file_exists is True:
+                    logging.info(
+                        f"... msg-file for {log_2_msg_file} already exists")
+                    continue
+
+            self.convert(log_2_msg_file)
+
+        logging.info("... done converting")
 
 
 def main() -> None:
 
-    conv = Converter()
+    base_path = "data"
+    log_path = f"{base_path}/log/"
+
+    conv = Converter(base_path=base_path)
     conv.convert_batch(
-        base_path="data/log/20161029_FLC_test",
+        base_path=log_path,
         file_type="log",
-        cache=False,
+        cache=True,
     )
 
 
