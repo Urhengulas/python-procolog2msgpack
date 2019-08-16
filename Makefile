@@ -5,4 +5,4 @@ run:
 	make convert
 
 convert:
-	pipenv run python -m converter.converter
+	env PIPENV_VERBOSITY=-1 pipenv run python convert_log_files.py --path data/

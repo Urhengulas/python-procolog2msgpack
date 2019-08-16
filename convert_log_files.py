@@ -1,13 +1,12 @@
+import argparse
 import logging
-import sys
 
 from converter.converter import Converter
 
 logging.basicConfig(level=logging.INFO)
 
 
-def main():
-    base_path = sys.argv[1]
+def convert(base_path: str):
 
     log_path = f"{base_path}/log/"
 
@@ -17,6 +16,16 @@ def main():
         file_type="log",
         cache=True,
     )
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--path", default=".")
+
+    args = vars(parser.parse_args())
+    base_path = args.get("path")
+
+    convert(base_path)
 
 
 if __name__ == "__main__":
