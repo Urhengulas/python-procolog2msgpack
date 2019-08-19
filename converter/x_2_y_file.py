@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from .utilities import get_files
+from .utilities import get_files, split_last
 
 
 @dataclass()
@@ -69,10 +69,3 @@ class X2YFile():
             return True
         else:
             return False
-
-
-def split_last(string: str, separator: str) -> tuple:
-
-    split_list = string.split(separator)
-
-    return separator.join(split_list[:-1]), split_list[-1]

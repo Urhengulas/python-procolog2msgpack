@@ -1,4 +1,3 @@
-import collections
 import glob
 import logging
 
@@ -14,3 +13,10 @@ def get_files(base_path: str, file_type: str, log: bool = False) -> list:
         )
 
     return files
+
+
+def split_last(string: str, separator: str) -> tuple:
+
+    split_list = string.split(separator)
+
+    return separator.join(split_list[:-1]), split_list[-1]
