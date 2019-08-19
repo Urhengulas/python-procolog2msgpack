@@ -21,6 +21,8 @@ class X2YFile():
     dir_path: str
     file: str
 
+    __slots__ = ["base_path", "dir_path", "file"]
+
     def __init__(self, file_name: str, file_type: str):
 
         base_path, file_path = split_last(file_name, f"/{file_type}/")
