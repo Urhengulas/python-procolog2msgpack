@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "38101ebf0b9abcc299255c9f822c577f3c97a60d6ea4c5cd01e53dda0e76dc47"
+            "sha256": "2f42301464781c7c90af8354bcf981a09f4f2c64044c469cf04fb52661c5133c"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -67,6 +67,9 @@
             ],
             "index": "pypi",
             "version": "==0.6.1"
+        },
+        "procolog2msgpack": {
+            "path": "."
         },
         "requests": {
             "hashes": [
