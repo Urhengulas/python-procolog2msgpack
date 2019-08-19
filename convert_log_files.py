@@ -1,7 +1,8 @@
 import argparse
 import logging
 
-from converter.converter import Converter
+# from converter.converter import Converter
+from procolog2msgpack.converter import Converter
 
 logging.basicConfig(level=logging.INFO)
 
