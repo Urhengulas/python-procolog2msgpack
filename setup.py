@@ -19,7 +19,7 @@ setup(
     author_email="johann.hemmann@dfki.de",
     license="LGPL-3.0",
     classifiers=[
-        "License :: OSI Approved :: GNU LESSER GENERAL PUBLIC LICENSE",
+        "License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
     ],
