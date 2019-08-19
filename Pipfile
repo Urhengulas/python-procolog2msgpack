@@ -12,7 +12,7 @@ twine = "*"
 [packages]
 msgpack = "*"
 docker = "*"
-procolog2msgpack = {path = "."}
+pocolog2msgpack = {path = "."}
 
 [requires]
 python_version = "3.7"
